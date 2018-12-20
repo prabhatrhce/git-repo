@@ -67,3 +67,15 @@ puts "Installing Erlang"
   execute "/sbin/service rabbitmq-server start" do
    cwd '/tmp'
   end
+  
+  execute "/sbin/service rabbitmqctl add_user test test" do
+   cwd '/tmp'
+  end
+
+  execute "/sbin/service rabbitmqctl set_user_tags test administrator" do
+   cwd '/tmp'
+  end
+
+  execute "/sbin/service rabbitmqctl set_permissions -p / test ".*" ".*" ".*"" do
+   cwd '/tmp'
+  end
