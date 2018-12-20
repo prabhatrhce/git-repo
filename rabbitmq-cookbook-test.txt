@@ -1,0 +1,156 @@
+[root@web1 chef-rabbitmq-running]# chef-solo -c solo.rb -j web.json
+Starting Chef Client, version 14.7.17
+resolving cookbooks for run list: ["rabbitmq_cookbook"]
+Synchronizing Cookbooks:
+  - rabbitmq_cookbook (0.1.0)
+Installing Cookbook Gems:
+Compiling Cookbooks...
+Installing Erlang
+Converging 12 resources
+Recipe: rabbitmq_cookbook::default
+  * remote_file[/tmp/erlang-21.2-1.el7.centos.x86_64.rpm] action nothing (skipped due to action :nothing)
+  * http_request[HEAD https://dl.bintray.com/rabbitmq-erlang/rpm/erlang/21/el/7/x86_64/erlang-21.2-1.el7.centos.x86_64.rpm] action head
+    - http_request[HEAD https://dl.bintray.com/rabbitmq-erlang/rpm/erlang/21/el/7/x86_64/erlang-21.2-1.el7.centos.x86_64.rpm] HEAD to https://dl.bintray.com/rabbitmq-erlang/rpm/erlang/21/el/7/x86_64/erlang-21.2-1.el7.centos.x86_64.rpm returned modified, trigger notifications
+  * remote_file[/tmp/erlang-21.2-1.el7.centos.x86_64.rpm] action create
+    - create new file /tmp/erlang-21.2-1.el7.centos.x86_64.rpm
+    - update content in file /tmp/erlang-21.2-1.el7.centos.x86_64.rpm from none to 1d702f
+    (file sizes exceed 10000000 bytes, diff output suppressed)
+    - change mode from '' to '0644'
+    - change owner from '' to 'root'
+    - change group from '' to 'root'
+    - restore selinux security context
+  * yum_package[erlang] action install
+    - install version 21.2-1.el7.centos of package erlang
+  * execute[wget https://forensics.cert.org/centos/cert/7/x86_64/socat-1.7.3.2-1.1.el7.x86_64.rpm] action run
+    - execute wget https://forensics.cert.org/centos/cert/7/x86_64/socat-1.7.3.2-1.1.el7.x86_64.rpm
+  * yum_package[socat] action install[2018-12-20T16:59:03+00:00] WARN: yum_package[socat] socat has installed version 1.7.3.2-2.el7, which is newer than available version 1.7.3.2-1.1.el7. Skipping...)
+ (up to date)
+  * execute[wget http://mirror.centos.org/centos/7/os/x86_64/Packages/logrotate-3.8.6-17.el7.x86_64.rpm] action run
+    - execute wget http://mirror.centos.org/centos/7/os/x86_64/Packages/logrotate-3.8.6-17.el7.x86_64.rpm
+  * yum_package[logrotate] action install (up to date)
+  * execute[wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.7.9/rabbitmq-server-3.7.9-1.el7.noarch.rpm] action run
+    - execute wget https://github.com/rabbitmq/rabbitmq-server/releases/download/v3.7.9/rabbitmq-server-3.7.9-1.el7.noarch.rpm
+  * yum_package[rabbitmq] action install (up to date)
+  * execute[chkconfig rabbitmq-server on] action run
+    - execute chkconfig rabbitmq-server on
+  * execute[rabbitmq-plugins enable rabbitmq_management] action run
+    - execute rabbitmq-plugins enable rabbitmq_management
+  * execute[/sbin/service rabbitmq-server start] action run
+    - execute /sbin/service rabbitmq-server start
+
+Running handlers:
+Running handlers complete
+Chef Client finished, 9/13 resources updated in 44 seconds
+[root@web1 chef-rabbitmq-running]# rabbitmqctl status
+Status of node rabbit@web1 ...
+[{pid,31675},
+ {running_applications,
+     [{rabbitmq_management,"RabbitMQ Management Console","3.7.9"},
+      {rabbitmq_management_agent,"RabbitMQ Management Agent","3.7.9"},
+      {rabbitmq_web_dispatch,"RabbitMQ Web Dispatcher","3.7.9"},
+      {rabbit,"RabbitMQ","3.7.9"},
+      {os_mon,"CPO  CXC 138 46","2.4.7"},
+      {amqp_client,"RabbitMQ AMQP Client","3.7.9"},
+      {rabbit_common,
+          "Modules shared by rabbitmq-server and rabbitmq-erlang-client",
+          "3.7.9"},
+      {jsx,"a streaming, evented json parsing toolkit","2.9.0"},
+      {ranch_proxy_protocol,"Ranch Proxy Protocol Transport","2.1.1"},
+      {cowboy,"Small, fast, modern HTTP server.","2.4.0"},
+      {ranch,"Socket acceptor pool for TCP protocols.","1.6.2"},
+      {ssl,"Erlang/OTP SSL application","9.1"},
+      {public_key,"Public key infrastructure","1.6.4"},
+      {asn1,"The Erlang ASN1 compiler version 5.0.8","5.0.8"},
+      {recon,"Diagnostic tools for production use","2.3.6"},
+      {inets,"INETS  CXC 138 49","7.0.3"},
+      {mnesia,"MNESIA  CXC 138 12","4.15.5"},
+      {xmerl,"XML parser","1.3.18"},
+      {cowlib,"Support library for manipulating Web protocols.","2.3.0"},
+      {crypto,"CRYPTO","4.4"},
+      {lager,"Erlang logging framework","3.6.5"},
+      {goldrush,"Erlang event stream processor","0.1.9"},
+      {compiler,"ERTS  CXC 138 10","7.3"},
+      {syntax_tools,"Syntax tools","2.1.6"},
+      {sasl,"SASL  CXC 138 11","3.3"},
+      {stdlib,"ERTS  CXC 138 10","3.7"},
+      {kernel,"ERTS  CXC 138 10","6.2"}]},
+ {os,{unix,linux}},
+ {erlang_version,
+     "Erlang/OTP 21 [erts-10.2] [source] [64-bit] [smp:1:1] [ds:1:1:10] [async-threads:64] [hipe]\n"},
+ {memory,
+     [{connection_readers,0},
+      {connection_writers,0},
+      {connection_channels,0},
+      {connection_other,2820},
+      {queue_procs,0},
+      {queue_slave_procs,0},
+      {plugins,618276},
+      {other_proc,28911884},
+      {metrics,205516},
+      {mgmt_db,152552},
+      {mnesia,73736},
+      {other_ets,2713536},
+      {binary,88184},
+      {msg_index,28528},
+      {code,23298996},
+      {atom,1139913},
+      {other_system,9871507},
+      {allocated_unused,7912792},
+      {reserved_unallocated,0},
+      {strategy,rss},
+      {total,[{erlang,67105448},{rss,74903552},{allocated,75018240}]}]},
+ {alarms,[]},
+ {listeners,[{clustering,25672,"::"},{amqp,5672,"::"},{http,15672,"::"}]},
+ {vm_memory_calculation_strategy,rss},
+ {vm_memory_high_watermark,0.4},
+ {vm_memory_limit,416342016},
+ {disk_free_limit,50000000},
+ {disk_free,36311834624},
+ {file_descriptors,
+     [{total_limit,32668},
+      {total_used,2},
+      {sockets_limit,29399},
+      {sockets_used,0}]},
+ {processes,[{limit,1048576},{used,373}]},
+ {run_queue,1},
+ {uptime,26},
+ {kernel,{net_ticktime,60}}]
+[root@web1 chef-rabbitmq-running]# ifconfig
+enp0s3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 10.0.2.15  netmask 255.255.255.0  broadcast 10.0.2.255
+        inet6 fe80::7f34:fedf:4ad3:ac25  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:37:f8:46  txqueuelen 1000  (Ethernet)
+        RX packets 671677  bytes 679695458 (648.2 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 206474  bytes 13264973 (12.6 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+enp0s8: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 172.16.1.4  netmask 255.255.255.0  broadcast 172.16.1.255
+        inet6 fe80::a00:27ff:fe65:b351  prefixlen 64  scopeid 0x20<link>
+        ether 08:00:27:65:b3:51  txqueuelen 1000  (Ethernet)
+        RX packets 860  bytes 143545 (140.1 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 670  bytes 646617 (631.4 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1  (Local Loopback)
+        RX packets 2688  bytes 168716 (164.7 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 2688  bytes 168716 (164.7 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[root@web1 chef-rabbitmq-running]# cat solo.rb
+file_cache_path "/root/downloads/chef-rabbitmq-running/cache"
+cookbook_path "//root/downloads/chef-rabbitmq-running"
+[root@web1 chef-rabbitmq-running]# cat web.json
+{
+ "run_list": [ "recipe[rabbitmq_cookbook]" ]
+}
+[root@web1 chef-rabbitmq-running]#
+[root@web1 chef-rabbitmq-running]# curl --silent --output /dev/null -I localhost:15672 && if [ $? -eq 0 ] ; then echo "true"; else echo "false"; fi
+true
+[root@web1 chef-rabbitmq-running]#
