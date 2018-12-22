@@ -1,0 +1,7 @@
+DEPENDENCIES
+  rabbitmq_cookbook
+    path: .
+    metadata: true
+
+GRAPH
+  rabbitmq_cookbook (0.1.0)
